@@ -60,7 +60,6 @@ always @(posedge clk or negedge reset)
      end
 endmodule
 // FSM com portas logicas
-// programar ainda....
 module statePorta(input clk, input res, input a, output [2:0] s);
 wire [2:0] e;
 wire [2:0] p;
@@ -82,7 +81,7 @@ endmodule
 module stateMem(input clk,input res, input a, output [2:0] saida);
 reg [5:0] StateMachine [0:15]; // 16 linhas e 6 bits de largura
 initial
-begin  // programar ainda....
+begin
 
 StateMachine[0]= 6'o42; StateMachine[1]= 6'd49;
 StateMachine[2]= 6'd34; StateMachine[3]= 6'o42;
@@ -120,7 +119,7 @@ initial
   always
     c= #(1) ~c;
 
-// visualizar formas de onda usar gtkwave out.vcd
+
 initial  begin
      $dumpfile ("out.vcd"); 
      $dumpvars; 
