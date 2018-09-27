@@ -60,9 +60,9 @@ wire [2:0] e;
 wire [2:0] p;
 
 assign s = e;  // saida = estado atual
-assign p[0] = e[2]&a&~e[0]|e[1]&(e[2]^e[0]); //6 operadores
-assign p[1] = e[2]&~a|e[0]&~e[1]|e[0]&~e[2];//8 operadores
-assign p[2] = e[1]&a|~e[1]&e[0]|~(e[0]|a);  //7 operadores
+assign p[0] = ~e[0]&(e[1]&e[2]|a&~e[1]); //6 operadores
+assign p[1] = e[0]&~e[1]|e[2]&(~a|(e[1]&~e[0]));//8 operadores
+assign p[2] = e[0]&a|~e[1]&~a|e[1]&~e[0];  //7 operadores
 //total 21 operadores
 ff  e0(p[0],clk,res,e[0]);
 ff  e1(p[1],clk,res,e[1]);
@@ -77,14 +77,24 @@ module stateMem(input clk,input res, input a, output [2:0] saida);
 reg [5:0] StateMachine [0:15]; // 16 linhas e 6 bits de largura
 initial
 begin  // programar ainda....
-StateMachine[0]= 6'o42; StateMachine[3] = 6'o42;
-StateMachine[5] = 6'o42; StateMachine[8] = 6'o42;
-StateMachine[13] = 6'o42; StateMachine[14] = 6'o42;
-StateMachine[1] = 6'd49;  StateMachine[2] = 6'd34;
-StateMachine[4] = 6'd52;  StateMachine[6] = 6'd62;
-StateMachine[7] = 6'd23;  StateMachine[9] = 6'd49;
-StateMachine[10] = 6'd34;  StateMachine[11] = 6'd59;
-StateMachine[12] = 6'd12;  StateMachine[15] = 6'd39;
+/*
+StateMachine[0] = 6'o42;  StateMachine[8] = 6'o42;
+StateMachine[1] = 6'o42;  StateMachine[9] = 6'o42;
+StateMachine[3] = 6'o42;  StateMachine[11] = 6'o42;  
+StateMachine[2] = 6'o42;  StateMachine[10] = 6'o42;
+StateMachine[6] = 6'o56;  StateMachine[14] = 6'o56;
+StateMachine[7] = 6'o67;  StateMachine[15] = 6'o67;
+StateMachine[5] = 6'o25;  StateMachine[13] = 6'o45;
+StateMachine[4] = 6'o64; StateMachine[12] = 6'o74;
+*/
+StateMachine[0]= 6'o42; StateMachine[1]= 6'd49;
+StateMachine[2]= 6'd34; StateMachine[3]= 6'o42;
+StateMachine[4]= 6'd52; StateMachine[5]= 6'o42;
+StateMachine[6]= 6'd62; StateMachine[7]= 6'd23;
+StateMachine[8]= 6'o42; StateMachine[9]= 6'd49;
+StateMachine[10]= 6'd34; StateMachine[11]= 6'o42;
+StateMachine[12]= 6'd12; StateMachine[13]= 6'o42;
+StateMachine[14]= 6'd62; StateMachine[15]= 6'd39;
 
 end
 wire [3:0] address;  // 16 linhas = 4 bits de endereco
@@ -131,4 +141,3 @@ initial  begin
       $finish ;
     end
 endmodule
-
