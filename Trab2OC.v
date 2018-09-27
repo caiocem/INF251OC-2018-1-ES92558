@@ -11,7 +11,7 @@ begin
 end 
 endmodule //End 
 
-// ----   FSM alto ni­vel com Case
+// ----   FSM alto niÂ­vel com Case
 module statem(clk, reset, a, saida);
 /*    
 
@@ -68,8 +68,8 @@ wire [2:0] p;
 assign s = e;  // saida = estado atual
 assign p[0] = ~e[0]&(e[1]&e[2]|a&~e[1]); //6 operadores
 assign p[1] = e[0]&~e[1]|e[2]&(~a|(e[1]&~e[0]));//8 operadores
-assign p[2] = e[0]&a|~e[1]&~a|e[1]&~e[0];  //7 operadores
-//total 21 operadores
+	assign p[2] = e[0]&a|~e[1]&~a|e[1]&~e[0];  //8 operadores
+//total 22 operadores
 ff  e0(p[0],clk,res,e[0]);
 ff  e1(p[1],clk,res,e[1]);
 ff  e2(p[2],clk,res,e[2]);
