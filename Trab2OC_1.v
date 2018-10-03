@@ -14,7 +14,6 @@ endmodule //End
 // ----   FSM alto nivel com Case
 module statem(clk, reset, a, saida);
 /*    
-
                               +---+
          01                   |q4 |
     +-----------------------> +---+
@@ -35,9 +34,6 @@ module statem(clk, reset, a, saida);
                              10       |    +-+-+
                                       +--> |q5 |
                                            +---+
-
-
-
 */
 input clk, reset;
 input [1:0] a;
@@ -103,9 +99,10 @@ assign s[0] = e[0];
 assign s[1] = e[1];
 assign s[2] = e[2]&~e[1]|e[2]&~e[0];
 
-assign p[0] = ~e[2]&~e[1]&~e[0]|~a[1]&a[0]&~e[1]|a[0]&e[2]&~e[0]|a[1]&~e[0]|a[1]&~a[0]&~e[1]|a[1]&e[2]&e[1]|a[1]&a[0]&~e[2];
-assign p[1] = ~a[1]&~e[2]&e[0]|~a[1]&a[0]&~e[1]|a[1]&~a[0]&~e[2]&~e[0]|a[0]&e[2]&~e[1]&e[0]|a[0]&e[2]&e[1]&~e[0]|~a[1]&a[0]&e[0]|~a[0]&~e[2]&~e[1]&e[0];
-assign p[2] = a[0]&~e[2]&e[1]&~e[0]|a[1]&~e[2]&e[1]&~e[0]|a[1]&a[0]&~e[2]|a[1]&a[0]&~e[1]|a[1]&a[0]&~e[0];
+assign p[1] =  ( a[0]&((~a[1]&(~e[1]|e[0]))|(e[2]&(e[0]|e[1])))) | (~e[2]&~a[0]&((~e[1]&e[0])|(e[1]&a[1]))); //17 operacoes
+assign p[2] =  (a[1]&a[0]&~(e[2]&e[1]&e[0])) | (~e[2]&e[1]&~e[0]&(a[0]|a[1])); //12 operacoes
+assign p[0] = ~e[1]&~e[2]&(~e[0]|a[0]|a[1])|e[2]&(a[0]^a[1])|a[1]&(e[1]&a[0]|~e[0]); //15 operadores
+//total 44 operadores
 
 ff  e0(p[0],clk,res,e[0]);
 ff  e1(p[1],clk,res,e[1]);
