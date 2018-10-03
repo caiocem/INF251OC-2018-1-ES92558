@@ -15,20 +15,27 @@ endmodule //End
 module statem(clk, reset, a, saida);
 /*    
 
-          +--+   1/0
-   +----> |q5+-------+
-  1|      +--+       v
-   |
- +-++     0        +--+
- |q3+------------> |q2|
- +-++ <----+       +-++
-   ^       |         |
-   |       |1        |1/0
-1/0|       +------+  v
-   |              |
- +-++             +---+
- |q0| <------------+q4|
- +--+       0      +--+
+                              +---+
+         01                   |q4 |
+    +-----------------------> +---+
+    | +----------------------+    |
+    | v                      ++   |
+ +--++   10       +---+       |   |01
+ |q2 +----------> |q3b|    01 |   |
+ +-+-+ <+         +-+-+    10 |   |        +---+
+   |    +---        |         |   |     11 |q6 |
+   |       +-+      |         |   |    +-----+-+
+00 |       00|      |10       |   +-+  |     ^
+   |         +-+    |         |     v  v     |
+   v           |    v         |    ++--+     |
+               +-+            +----+q3 |     | 11
+ +---+           +----+            +--++     |
+ |q0 +----------> |q1 |            ^  |      |
+ +---+    00      +---+ +----------+  |11    |
+                             10       |    +-+-+
+                                      +--> |q5 |
+                                           +---+
+
 
 
 */
@@ -88,7 +95,6 @@ always @(posedge clk or negedge reset)
      end
 endmodule
 // FSM com portas logicas
-// programar ainda....
 module statePorta(input clk, input res, input [1:0]a, output [2:0] s);
 wire [2:0] e;
 wire [2:0] p;
@@ -96,12 +102,11 @@ wire [2:0] p;
 assign s[0] = e[0]; 
 assign s[1] = e[1];
 assign s[2] = e[2]&~e[1]|e[2]&~e[0];
-//assign s = e;
-//assign s = e;
-assign p[0] = a[1]&~e[0]|~e[2]&~e[1]&~e[0]|~a[1]&a[0]&~e[1]|a[0]&e[2]&~e[0]|a[1]&~a[0]&~e[1]|a[1]&e[2]&e[1]|a[1]&a[0]&~e[2]; //6 operadores
-assign p[1] = ~a[0]&~e[2]&e[0]|~a[1]&a[0]&~e[1]|~a[1]&a[0]&~e[0]|a[0]&e[2]&~e[1]&e[0]|a[0]&e[2]&e[1]&~e[0]|a[1]&~a[0]&~e[2]&e[1];//8 operadores
-assign p[2] = a[1]&a[0]&~e[1]|a[1]&a[0]&e[0]|a[0]&~e[2]&e[1]&~e[0]|a[1]&~e[2]&e[1]&~e[0];  //8 operadores
-//total 22 operadores
+
+assign p[0] = ~e[2]&~e[1]&~e[0]|~a[1]&a[0]&~e[1]|a[0]&e[2]&~e[0]|a[1]&~e[0]|a[1]&~a[0]&~e[1]|a[1]&e[2]&e[1]|a[1]&a[0]&~e[2];
+assign p[1] = ~a[1]&~e[2]&e[0]|~a[1]&a[0]&~e[1]|a[1]&~a[0]&~e[2]&~e[0]|a[0]&e[2]&~e[1]&e[0]|a[0]&e[2]&e[1]&~e[0]|~a[1]&a[0]&e[0]|~a[0]&~e[2]&~e[1]&e[0];
+assign p[2] = a[0]&~e[2]&e[1]&~e[0]|a[1]&~e[2]&e[1]&~e[0]|a[1]&a[0]&~e[2]|a[1]&a[0]&~e[1]|a[1]&a[0]&~e[0];
+
 ff  e0(p[0],clk,res,e[0]);
 ff  e1(p[1],clk,res,e[1]);
 ff  e2(p[2],clk,res,e[2]);
@@ -114,8 +119,7 @@ endmodule
 module stateMem(input clk,input res, input [1:0]a, output [2:0] saida);
 reg [5:0] StateMachine [0:31]; // 16 linhas e 6 bits de largura
 initial
-begin  // programar ainda....
-
+begin  
 StateMachine[0]= 6'o10; StateMachine[1]= 6'o21;
 StateMachine[2]= 6'o02; StateMachine[3]= 6'o23;
 StateMachine[4]= 6'o34; StateMachine[5]= 6'o65;
@@ -161,22 +165,22 @@ initial
     c = 1'b0;
   always
     c= #(1) ~c;
-
-// visualizar formas de onda usar gtkwave out.vcd
-initial  begin
-     $dumpfile ("out.vcd"); 
-     $dumpvars; 
-   end 
-
+//testbench: 92558 → binário = 10100000110010010 → A = 1,1,0,0,1,2,1,0,2
   initial 
     begin
      $monitor($time," c %b res %b a %b s %d smem %d sporta %d",c,res,a,saida, saida2, saida1);
       #1 res=0; a=2'd0;
       #1 res=1;
-      #16 a=2'd1;
-      #16 a=2'd2;
-      #16 a=2'd3;
-      #16;
+      #8 a=2'd1;
+      #8 a=2'd1;
+      #8 a=2'd0;
+      #8 a=2'd0;
+      #8 a=2'd1;
+      #8 a=2'd2;
+      #8 a=2'd1;
+      #8 a=2'd0;
+      #8 a=2'd2;
+      #8;
       $finish ;
     end
 endmodule
