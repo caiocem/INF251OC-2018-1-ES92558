@@ -1,4 +1,4 @@
-//nome e matrícula dos integrantes: 
+//nome e matricula dos integrantes: 
 // Caio O. H. Henrici - 92558
 // Rodrigo E. O. B. Chichorro - 92535 
 // Wallace F. Rosa - 92545
