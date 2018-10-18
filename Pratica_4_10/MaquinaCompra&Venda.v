@@ -1,5 +1,6 @@
 //nome e matricula dos integrantes: 
 // Caio O. H. Henrici - 92558
+// Joel A. V. Silva - 92562
 // Rodrigo E. O. B. Chichorro - 92535 
 // Wallace F. Rosa - 92545
 module ff ( input data, input c, input r, output q);
