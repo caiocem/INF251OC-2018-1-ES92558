@@ -1,3 +1,4 @@
+#Matricula 92558
 lw $t4,0($gp) #ler A
 lw $t5,8($gp) #ler B
 lw $t6,16($gp)#ler C
