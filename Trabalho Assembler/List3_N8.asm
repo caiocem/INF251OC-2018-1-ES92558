@@ -1,3 +1,4 @@
+#Matricula 92558
 lw $t8,0($gp) #ler pos desejada para acesso
 addi $t2,$gp,4 #aponta para o comeco do vetor A
 addi $t3,$gp,16#aponta para o comeco do vetor B
