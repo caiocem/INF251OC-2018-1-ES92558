@@ -1,0 +1,7 @@
+Comparar rs,rt com writereg (se regwrite ligado), se rs igual liga o mux de cima, se rt liga mux de baixo,
+se não igual continua. assign (regwrite&rs==writereg)?alurslt:data1. 
+se desviar tem que dar flush só na barreira s1(tirar jumps4 da condição).
+casos de  alu, ~memread&regwrite pra ser instrução de alu (checar o rd), stallar o beq e deixar o alu rodar 
+(stallar o pc (pc<=pc) e primeira barreita(stall_s1_s2))
+casos load,alu,beq. se tiver load memread ligado,stallar pce s1,flush em s2 e deixar load terminar
+caso load,beq inserir dois NOP,1.memread ligado,2.~memread&regwrite
